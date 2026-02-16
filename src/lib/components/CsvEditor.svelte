@@ -44,6 +44,21 @@
 		data[rowIdx][colIdx] = value;
 	}
 
+	// Svelte action to manage cell content without reactivity conflicts
+	function initCellContent(node: HTMLElement, text: string) {
+		// Set initial content
+		node.textContent = text;
+
+		return {
+			update(newText: string) {
+				// Only update if cell is not currently focused (being edited)
+				if (document.activeElement !== node) {
+					node.textContent = newText;
+				}
+			}
+		};
+	}
+
 	// Row operations
 	function addRow() {
 		data = [...data, new Array(headers.length).fill('')];
@@ -104,6 +119,16 @@
 		fileInputElement?.click();
 	}
 
+	// Create blank CSV
+	function createBlankCsv() {
+		headers = ['Column 1', 'Column 2', 'Column 3'];
+		data = [
+			['', '', ''],
+			['', '', ''],
+			['', '', '']
+		];
+	}
+
 	// Handle keyboard events
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Escape' && isFullscreen) {
@@ -126,10 +151,15 @@
 				</svg>
 			</div>
 			<h3>No CSV Loaded</h3>
-			<p>Click the button below to load a CSV file</p>
-			<button class="btn-primary" onclick={triggerFileInput}>
-				Load CSV File
-			</button>
+			<p>Click a button below to load a file or create a new CSV</p>
+			<div class="empty-state-actions">
+				<button class="btn-primary" onclick={triggerFileInput}>
+					Load CSV File
+				</button>
+				<button class="btn" onclick={createBlankCsv}>
+					Create Blank CSV
+				</button>
+			</div>
 			<input
 				bind:this={fileInputElement}
 				type="file"
@@ -233,9 +263,8 @@
 										class="editable-cell"
 										contenteditable="true"
 										onblur={(e) => updateCell(rowIdx, colIdx, e)}
-									>
-										{cell}
-									</div>
+										use:initCellContent={cell}
+									></div>
 								</td>
 							{/each}
 							<td class="row-actions">
@@ -373,6 +402,14 @@
 	.empty-state p {
 		color: var(--color-muted);
 		margin: 0;
+	}
+
+	.empty-state-actions {
+		display: flex;
+		gap: 0.75rem;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	/* Toolbar */

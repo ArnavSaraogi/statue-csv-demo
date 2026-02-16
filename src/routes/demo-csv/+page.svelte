@@ -34,8 +34,8 @@
 		<div class="instructions-grid">
 			<div class="instruction-card">
 				<div class="instruction-number">1</div>
-				<h3>Load CSV File</h3>
-				<p>Click "Load CSV File" to upload a CSV file from your computer. The component will parse and display the data in an editable table.</p>
+				<h3>Load or Create CSV</h3>
+				<p>Click "Load CSV File" to upload an existing file, or click "Create Blank CSV" to start with an empty 3x3 grid that you can immediately edit and expand.</p>
 			</div>
 
 			<div class="instruction-card">
@@ -86,6 +86,12 @@
 				<div class="feature-icon">📁</div>
 				<h3>CSV File Upload</h3>
 				<p>Built-in file input with CSV parsing powered by PapaParse. Handles various CSV formats and encodings.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">📄</div>
+				<h3>Create from Scratch</h3>
+				<p>Start with a blank 3x3 CSV grid without needing an existing file. Perfect for creating new datasets from scratch.</p>
 			</div>
 
 			<div class="feature-card">

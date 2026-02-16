@@ -13,8 +13,13 @@
     I write about JavaScript, Svelte, and Static Site Generators.
   </p>
   
-  <a href="/blog" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-    Read my posts &rarr;
-  </a>
+  <div class="flex gap-4 flex-wrap">
+    <a href="/blog" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+      Read my posts &rarr;
+    </a>
+    <a href="/demo-csv" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+      Try CSV Demo &rarr;
+    </a>
+  </div>
 </section>
 
