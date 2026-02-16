@@ -606,6 +606,41 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 />
 ```
 
+- **CsvEditor**: Interactive CSV editor component for loading, editing, and exporting CSV data.
+    - Props:
+        - `filename?: string` - Default filename for downloads (default: 'edited_data.csv')
+    - Features:
+        - Load CSV files from file system
+        - Display data in interactive table
+        - Inline cell editing (click to edit)
+        - Add/delete rows and columns
+        - Download as CSV or JSON
+        - Empty state with load prompt
+        - Responsive design with sticky headers
+        - Row and column count display
+        - Confirmation prompts for deletions
+    - Example:
+
+```svelte
+<script>
+	import { CsvEditor } from 'statue-ssg';
+</script>
+
+<!-- Basic usage -->
+<CsvEditor filename="my_data.csv" />
+
+<!-- With custom filename -->
+<CsvEditor filename="sales_report_2024.csv" />
+```
+
+    - **Usage Notes**:
+        - Click any cell to edit inline (changes save on blur)
+        - Uses PapaParse for CSV parsing
+        - Handles special characters (commas, quotes) correctly
+        - Sticky row numbers and column headers for large datasets
+        - Scroll horizontally for wide tables
+        - See `/demo-csv` route for live demo
+
 ### Notes
 
 - All components are SSR-friendly and work in SvelteKit routes and layouts.
