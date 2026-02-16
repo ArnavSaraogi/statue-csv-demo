@@ -39,7 +39,8 @@ const config = {
     prerender: {
       crawl: true,
       entries: ['*'],
-      handleHttpError: 'warn'
+      handleHttpError: 'warn',
+      handleUnseenRoutes: 'ignore' // Ignore routes without content (e.g., /blog/[slug] when no blog posts exist)
     }
   }
 };
