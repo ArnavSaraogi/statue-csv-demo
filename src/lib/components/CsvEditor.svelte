@@ -196,11 +196,6 @@
 
 			<div class="info-section">
 				<span class="info-badge">{rowCount} rows × {colCount} columns</span>
-				<button class="btn" onclick={() => isFullscreen = true} title="Open in full screen">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-					</svg>
-				</button>
 			</div>
 		</div>
 
@@ -266,6 +261,18 @@
 <!-- Normal mode -->
 {#if !isFullscreen}
 	<div class="csv-editor">
+		<!-- Full-screen button in top-right corner -->
+		<button
+			class="fullscreen-btn"
+			onclick={() => isFullscreen = true}
+			title="Open in full screen"
+			aria-label="Open in full screen"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+			</svg>
+		</button>
+
 		{@render csvEditorContent()}
 	</div>
 {/if}
@@ -307,11 +314,37 @@
 
 <style>
 	.csv-editor {
+		position: relative;
 		width: 100%;
 		background: var(--color-card);
 		border-radius: 8px;
 		border: 1px solid var(--color-border);
 		overflow: hidden;
+	}
+
+	/* Full-screen button (top-right corner) */
+	.fullscreen-btn {
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem;
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: 6px;
+		color: var(--color-foreground);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.fullscreen-btn:hover {
+		background: var(--color-muted);
+		border-color: var(--color-primary);
+		transform: scale(1.05);
 	}
 
 	/* Empty state */
@@ -516,17 +549,19 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.25rem;
-		background: transparent;
-		border: none;
-		color: var(--color-muted);
+		background: rgba(255, 255, 255, 0.1);
+		border: 1px solid var(--color-border);
+		color: var(--color-foreground);
 		cursor: pointer;
 		border-radius: 4px;
 		transition: all 0.2s ease;
-		opacity: 1;
+		opacity: 0.7;
 	}
 
 	.delete-btn:hover {
-		background: rgba(255, 0, 0, 0.1);
+		opacity: 1;
+		background: rgba(255, 0, 0, 0.15);
+		border-color: #ef4444;
 		color: #ef4444;
 	}
 
