@@ -4,21 +4,27 @@
 
 <svelte:head>
 	<title>CSV Editor Demo - Statue SSG</title>
-	<meta name="description" content="Interactive CSV editor component with upload, edit, and download capabilities" />
+	<meta
+		name="description"
+		content="Interactive CSV editor component with upload, edit, and download capabilities"
+	/>
 </svelte:head>
 
 <div class="demo-container">
 	<header class="demo-header">
 		<h1>CSV Editor Component</h1>
 		<p class="subtitle">
-			A powerful, interactive CSV editor built with SvelteKit and PapaParse. Load, edit, and export CSV data with ease.
+			Features include creating CSVs, loading and editing CSVs, downloading data as CSV or JSON,
+			adding and deleting rows/columns, and fullscreen mode for ease of use.
 		</p>
 	</header>
 
 	<section class="demo-section">
 		<div class="section-header">
 			<h2>Live Demo</h2>
-			<p>Try uploading a CSV file, editing cells, adding rows/columns, and downloading your changes.</p>
+			<p>
+				Try uploading a CSV file, editing cells, adding rows/columns, and downloading your changes.
+			</p>
 		</div>
 
 		<div class="component-wrapper">
@@ -35,43 +41,64 @@
 			<div class="instruction-card">
 				<div class="instruction-number">1</div>
 				<h3>Load or Create CSV</h3>
-				<p>Click "Load CSV File" to upload an existing file, or click "Create Blank CSV" to start with an empty 3x3 grid that you can immediately edit and expand.</p>
+				<p>
+					Click "Load CSV File" to upload an existing file, or click "Create Blank CSV" to start
+					with an empty 3x3 grid that you can immediately edit and expand.
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">2</div>
 				<h3>Edit Cells</h3>
-				<p>Click any cell to edit its content. Changes are saved automatically when you click outside the cell (on blur).</p>
+				<p>
+					Click any cell to edit its content. Changes are saved automatically when you click outside
+					the cell (on blur).
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">3</div>
 				<h3>Add/Delete Rows</h3>
-				<p>Use "Add Row" to append a new empty row. Click the × button on any row to delete it (confirmation required).</p>
+				<p>
+					Use "Add Row" to append a new empty row. Click the × button on any row to delete it
+					(confirmation required).
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">4</div>
 				<h3>Add/Delete Columns</h3>
-				<p>Use "Add Column" to create a new column (you'll be prompted for a name). Click × in the header to delete a column.</p>
+				<p>
+					Use "Add Column" to create a new column (you'll be prompted for a name). Click × in the
+					header to delete a column.
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">5</div>
 				<h3>Download CSV</h3>
-				<p>Click "Download CSV" to export your edited data as a CSV file. The file will use the filename prop (default: edited_data.csv).</p>
+				<p>
+					Click "Download CSV" to export your edited data as a CSV file. The file will use the
+					filename prop (default: edited_data.csv).
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">6</div>
 				<h3>Export JSON</h3>
-				<p>Click "Export JSON" to download your data as a JSON file. Each row becomes an object with column headers as keys.</p>
+				<p>
+					Click "Export JSON" to download your data as a JSON file. Each row becomes an object with
+					column headers as keys.
+				</p>
 			</div>
 
 			<div class="instruction-card">
 				<div class="instruction-number">7</div>
 				<h3>Full-Screen Mode</h3>
-				<p>Click the expand icon next to the row/column count to open the editor in full-screen mode. Press ESC or click outside to exit.</p>
+				<p>
+					Click the expand icon next to the row/column count to open the editor in full-screen mode.
+					Press ESC or click outside to exit.
+				</p>
 			</div>
 		</div>
 	</section>
@@ -85,31 +112,45 @@
 			<div class="feature-card">
 				<div class="feature-icon">📁</div>
 				<h3>CSV File Upload</h3>
-				<p>Built-in file input with CSV parsing powered by PapaParse. Handles various CSV formats and encodings.</p>
+				<p>
+					Built-in file input with CSV parsing powered by PapaParse. Handles various CSV formats and
+					encodings.
+				</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">📄</div>
 				<h3>Create from Scratch</h3>
-				<p>Start with a blank 3x3 CSV grid without needing an existing file. Perfect for creating new datasets from scratch.</p>
+				<p>
+					Start with a blank 3x3 CSV grid without needing an existing file. Perfect for creating new
+					datasets from scratch.
+				</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">✏️</div>
 				<h3>Inline Editing</h3>
-				<p>Click any cell to edit content with contenteditable. Changes save on blur for a seamless editing experience.</p>
+				<p>
+					Click any cell to edit content with contenteditable. Changes save on blur for a seamless
+					editing experience.
+				</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">➕</div>
 				<h3>Dynamic Rows/Columns</h3>
-				<p>Add or remove rows and columns on the fly. Confirmation dialogs prevent accidental deletions.</p>
+				<p>
+					Add or remove rows and columns on the fly. Confirmation dialogs prevent accidental
+					deletions.
+				</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">⬇️</div>
 				<h3>Export Options</h3>
-				<p>Download your data as CSV or JSON. Perfect for data manipulation and format conversion.</p>
+				<p>
+					Download your data as CSV or JSON. Perfect for data manipulation and format conversion.
+				</p>
 			</div>
 
 			<div class="feature-card">
@@ -121,13 +162,19 @@
 			<div class="feature-card">
 				<div class="feature-icon">📱</div>
 				<h3>Responsive Design</h3>
-				<p>Fully responsive with sticky headers and row numbers. Works on mobile, tablet, and desktop.</p>
+				<p>
+					Fully responsive with sticky headers and row numbers. Works on mobile, tablet, and
+					desktop.
+				</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">🖥️</div>
 				<h3>Full-Screen Mode</h3>
-				<p>Expand the editor to full-screen for easier viewing and editing of large datasets. Exit with ESC or backdrop click.</p>
+				<p>
+					Expand the editor to full-screen for easier viewing and editing of large datasets. Exit
+					with ESC or backdrop click.
+				</p>
 			</div>
 		</div>
 	</section>
@@ -135,20 +182,27 @@
 	<section class="demo-section">
 		<div class="section-header">
 			<h2>Sample CSV Data</h2>
-			<p>Need sample data to test? Copy the CSV below and save it as a .csv file, then upload it.</p>
+			<p>
+				Need sample data to test? Copy the CSV below and save it as a .csv file, then upload it.
+			</p>
 		</div>
 
 		<div class="code-block">
-			<pre><code>Name,Email,Role,Department,Salary
+			<pre><code
+					>Name,Email,Role,Department,Salary
 John Doe,john@example.com,Software Engineer,Engineering,95000
 Jane Smith,jane@example.com,Product Manager,Product,105000
 Bob Johnson,bob@example.com,Designer,Design,85000
 Alice Williams,alice@example.com,Data Scientist,Engineering,98000
-Charlie Brown,charlie@example.com,Marketing Manager,Marketing,92000</code></pre>
+Charlie Brown,charlie@example.com,Marketing Manager,Marketing,92000</code
+				></pre>
 		</div>
 
 		<div class="sample-description">
-			<p><strong>Alternative:</strong> You can also create a CSV file with any spreadsheet software (Excel, Google Sheets, LibreOffice Calc) and export it as CSV.</p>
+			<p>
+				<strong>Alternative:</strong> You can also create a CSV file with any spreadsheet software (Excel,
+				Google Sheets, LibreOffice Calc) and export it as CSV.
+			</p>
 		</div>
 	</section>
 
@@ -158,8 +212,10 @@ Charlie Brown,charlie@example.com,Marketing Manager,Marketing,92000</code></pre>
 		</div>
 
 		<div class="code-block">
-			<pre><code>npm install statue-ssg papaparse
-npm install -D @types/papaparse</code></pre>
+			<pre><code
+					>npm install statue-ssg papaparse
+npm install -D @types/papaparse</code
+				></pre>
 		</div>
 	</section>
 
@@ -169,11 +225,13 @@ npm install -D @types/papaparse</code></pre>
 		</div>
 
 		<div class="code-block">
-			<pre><code>&lt;script&gt;
+			<pre><code
+					>&lt;script&gt;
   import &#123; CsvEditor &#125; from 'statue-ssg';
 &lt;/script&gt;
 
-&lt;CsvEditor filename="my_data.csv" /&gt;</code></pre>
+&lt;CsvEditor filename="my_data.csv" /&gt;</code
+				></pre>
 		</div>
 
 		<div class="props-table">
@@ -282,7 +340,9 @@ npm install -D @types/papaparse</code></pre>
 		border: 1px solid var(--color-border);
 		border-radius: 8px;
 		padding: 1.5rem;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
 	}
 
 	.instruction-card:hover {
@@ -477,7 +537,8 @@ npm install -D @types/papaparse</code></pre>
 			font-size: 0.875rem;
 		}
 
-		th, td {
+		th,
+		td {
 			padding: 0.5rem;
 		}
 	}

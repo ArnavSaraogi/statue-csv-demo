@@ -13,11 +13,17 @@
 	let data = $state<string[][]>([]);
 	let fileInputElement = $state<HTMLInputElement | null>(null);
 	let isFullscreen = $state(false);
+	let filenameValue = $state(filename);
 
 	// Derived state
 	let isEmpty = $derived(headers.length === 0);
 	let rowCount = $derived(data.length);
 	let colCount = $derived(headers.length);
+
+	// Sync filename state with prop
+	$effect(() => {
+		filenameValue = filename;
+	});
 
 	// File loading
 	function loadCsvFile(event: Event) {
@@ -44,6 +50,13 @@
 		data[rowIdx][colIdx] = value;
 	}
 
+	// Header editing
+	function updateHeader(colIdx: number, event: Event) {
+		const target = event.target as HTMLDivElement;
+		const value = target.textContent || `Column ${colIdx + 1}`;
+		headers[colIdx] = value;
+	}
+
 	// Svelte action to manage cell content without reactivity conflicts
 	function initCellContent(node: HTMLElement, text: string) {
 		// Set initial content
@@ -57,6 +70,12 @@
 				}
 			}
 		};
+	}
+
+	// Helper function to get base filename without extension
+	function getBaseFilename(name: string): string {
+		const lastDot = name.lastIndexOf('.');
+		return lastDot > 0 ? name.slice(0, lastDot) : name;
 	}
 
 	// Row operations
@@ -92,7 +111,9 @@
 		const blob = new Blob([csv], { type: 'text/csv' });
 		const link = document.createElement('a');
 		link.href = URL.createObjectURL(blob);
-		link.download = filename;
+		// Ensure .csv extension
+		const base = getBaseFilename(filenameValue);
+		link.download = base + '.csv';
 		link.click();
 		URL.revokeObjectURL(link.href);
 	}
@@ -109,7 +130,9 @@
 		const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
 		const link = document.createElement('a');
 		link.href = URL.createObjectURL(blob);
-		link.download = filename.replace('.csv', '.json');
+		// Use base filename with .json extension
+		const base = getBaseFilename(filenameValue);
+		link.download = base + '.json';
 		link.click();
 		URL.revokeObjectURL(link.href);
 	}
@@ -127,6 +150,14 @@
 			['', '', ''],
 			['', '', '']
 		];
+	}
+
+	// Reset editor
+	function resetEditor() {
+		if (confirm('Reset editor and clear all data? This cannot be undone.')) {
+			headers = [];
+			data = [];
+		}
 	}
 
 	// Handle keyboard events
@@ -179,6 +210,13 @@
 					</svg>
 					Load CSV
 				</button>
+				<button class="btn btn-reset" onclick={resetEditor} title="Reset editor and clear all data">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<polyline points="1 4 1 10 7 10"></polyline>
+						<path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+					</svg>
+					Reset
+				</button>
 				<input
 					bind:this={fileInputElement}
 					type="file"
@@ -206,6 +244,18 @@
 			</div>
 
 			<div class="toolbar-section">
+				<div class="filename-input-wrapper">
+					<label for="filename-input" class="filename-label">Filename:</label>
+					<input
+						id="filename-input"
+						type="text"
+						bind:value={filenameValue}
+						class="filename-input"
+						placeholder="filename"
+						title="Edit filename for downloads"
+					/>
+				</div>
+
 				<button class="btn-primary" onclick={downloadCsv} title="Download as CSV">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -237,7 +287,12 @@
 						{#each headers as header, colIdx}
 							<th>
 								<div class="header-cell">
-									<span class="header-text">{header}</span>
+									<div
+										class="header-text editable-header"
+										contenteditable="true"
+										onblur={(e) => updateHeader(colIdx, e)}
+										use:initCellContent={header}
+									></div>
 									<button
 										class="delete-btn"
 										onclick={() => deleteColumn(colIdx)}
@@ -475,6 +530,48 @@
 		transform: translateY(-1px);
 	}
 
+	.btn-reset:hover {
+		background: rgba(255, 0, 0, 0.1);
+		border-color: #ef4444;
+		color: #ef4444;
+	}
+
+	.filename-input-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.25rem 0;
+	}
+
+	.filename-label {
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--color-foreground);
+		white-space: nowrap;
+	}
+
+	.filename-input {
+		padding: 0.375rem 0.625rem;
+		font-size: 0.8125rem;
+		border-radius: 4px;
+		border: 1px solid var(--color-border);
+		background: var(--color-background);
+		color: var(--color-foreground);
+		transition: all 0.2s ease;
+		min-width: 150px;
+		max-width: 200px;
+	}
+
+	.filename-input:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+	}
+
+	.filename-input::placeholder {
+		color: var(--color-muted);
+	}
+
 	/* Table container */
 	.table-container {
 		overflow-x: auto;
@@ -528,10 +625,26 @@
 		min-width: 120px;
 	}
 
-	.header-text {
+	.editable-header {
 		flex: 1;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		padding: 0.25rem;
+		margin: -0.25rem;
+		border-radius: 4px;
+		cursor: text;
+		outline: none;
+		transition: background 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.editable-header:hover {
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	.editable-header:focus {
+		background: var(--color-card);
+		box-shadow: inset 0 0 0 2px var(--color-primary);
+		cursor: text;
 	}
 
 	/* Table body */
@@ -710,6 +823,18 @@
 		.btn-primary {
 			flex: 1;
 			justify-content: center;
+		}
+
+		.filename-input-wrapper {
+			width: 100%;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.25rem;
+		}
+
+		.filename-input {
+			width: 100%;
+			max-width: none;
 		}
 
 		.modal-container {
