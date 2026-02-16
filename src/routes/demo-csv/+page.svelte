@@ -67,6 +67,12 @@
 				<h3>Export JSON</h3>
 				<p>Click "Export JSON" to download your data as a JSON file. Each row becomes an object with column headers as keys.</p>
 			</div>
+
+			<div class="instruction-card">
+				<div class="instruction-number">7</div>
+				<h3>Full-Screen Mode</h3>
+				<p>Click the expand icon next to the row/column count to open the editor in full-screen mode. Press ESC or click outside to exit.</p>
+			</div>
 		</div>
 	</section>
 
@@ -110,6 +116,12 @@
 				<div class="feature-icon">📱</div>
 				<h3>Responsive Design</h3>
 				<p>Fully responsive with sticky headers and row numbers. Works on mobile, tablet, and desktop.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">🖥️</div>
+				<h3>Full-Screen Mode</h3>
+				<p>Expand the editor to full-screen for easier viewing and editing of large datasets. Exit with ESC or backdrop click.</p>
 			</div>
 		</div>
 	</section>

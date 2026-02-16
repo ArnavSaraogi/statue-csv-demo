@@ -440,6 +440,36 @@ Call-to-action section with buttons.
 
 ---
 
+### CsvEditor
+
+Interactive CSV editor for loading, editing, and exporting CSV data.
+
+```svelte
+<script>
+  import { CsvEditor } from 'statue-ssg';
+</script>
+
+<CsvEditor filename="my_data.csv" />
+```
+
+**Props:**
+- `filename` (string, optional) - Filename for downloads (default: 'edited_data.csv')
+
+**Features:**
+- Upload CSV files with drag-and-drop support
+- Inline cell editing with contenteditable
+- Add and delete rows dynamically
+- Add and delete columns with custom names
+- Download edited data as CSV
+- Export data to JSON format
+- Responsive table with sticky headers
+- Theme-aware styling
+
+**Dependencies:**
+- Requires `papaparse` package: `npm install papaparse @types/papaparse`
+
+---
+
 ## About Page Components
 
 ### Mission

@@ -12,6 +12,7 @@
 	let headers = $state<string[]>([]);
 	let data = $state<string[][]>([]);
 	let fileInputElement = $state<HTMLInputElement | null>(null);
+	let isFullscreen = $state(false);
 
 	// Derived state
 	let isEmpty = $derived(headers.length === 0);
@@ -102,9 +103,18 @@
 	function triggerFileInput() {
 		fileInputElement?.click();
 	}
+
+	// Handle keyboard events
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && isFullscreen) {
+			isFullscreen = false;
+		}
+	}
 </script>
 
-<div class="csv-editor">
+<svelte:window on:keydown={handleKeydown} />
+
+{#snippet csvEditorContent()}
 	{#if isEmpty}
 		<div class="empty-state">
 			<div class="empty-icon">
@@ -186,10 +196,15 @@
 
 			<div class="info-section">
 				<span class="info-badge">{rowCount} rows × {colCount} columns</span>
+				<button class="btn" onclick={() => isFullscreen = true} title="Open in full screen">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+					</svg>
+				</button>
 			</div>
 		</div>
 
-		<div class="table-container">
+		<div class="table-container" class:fullscreen={isFullscreen}>
 			<table class="data-table">
 				<thead>
 					<tr>
@@ -246,7 +261,49 @@
 			</table>
 		</div>
 	{/if}
-</div>
+{/snippet}
+
+<!-- Normal mode -->
+{#if !isFullscreen}
+	<div class="csv-editor">
+		{@render csvEditorContent()}
+	</div>
+{/if}
+
+<!-- Full-screen modal -->
+{#if isFullscreen}
+	<!-- Backdrop -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="modal-backdrop"
+		onclick={() => isFullscreen = false}
+	></div>
+
+	<!-- Modal content -->
+	<div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+		<!-- Header with close button -->
+		<div class="modal-header">
+			<h2 id="modal-title" class="modal-title">CSV Editor</h2>
+			<button
+				class="close-modal-btn"
+				onclick={() => isFullscreen = false}
+				title="Close full screen"
+				aria-label="Close full screen"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<line x1="18" y1="6" x2="6" y2="18"></line>
+					<line x1="6" y1="6" x2="18" y2="18"></line>
+				</svg>
+			</button>
+		</div>
+
+		<!-- CSV Editor content -->
+		<div class="modal-content">
+			{@render csvEditorContent()}
+		</div>
+	</div>
+{/if}
 
 <style>
 	.csv-editor {
@@ -355,6 +412,11 @@
 		overflow-y: auto;
 	}
 
+	.table-container.fullscreen {
+		max-height: none;
+		flex: 1;
+	}
+
 	.data-table {
 		width: 100%;
 		border-collapse: collapse;
@@ -460,13 +522,94 @@
 		cursor: pointer;
 		border-radius: 4px;
 		transition: all 0.2s ease;
-		opacity: 0.5;
+		opacity: 1;
 	}
 
 	.delete-btn:hover {
-		opacity: 1;
 		background: rgba(255, 0, 0, 0.1);
 		color: #ef4444;
+	}
+
+	/* Modal backdrop */
+	.modal-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 40;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+	}
+
+	/* Modal container */
+	.modal-container {
+		position: fixed;
+		inset: 1rem;
+		z-index: 50;
+		display: flex;
+		flex-direction: column;
+		background: var(--color-background);
+		border-radius: 8px;
+		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+		overflow: hidden;
+	}
+
+	/* Modal header */
+	.modal-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+		border-bottom: 1px solid var(--color-border);
+		background: var(--color-card);
+	}
+
+	.modal-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--color-foreground);
+		margin: 0;
+	}
+
+	/* Close button */
+	.close-modal-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem;
+		background: transparent;
+		border: 1px solid var(--color-border);
+		border-radius: 4px;
+		color: var(--color-foreground);
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.close-modal-btn:hover {
+		background: var(--color-muted);
+		border-color: var(--color-primary);
+	}
+
+	/* Modal content */
+	.modal-content {
+		flex: 1;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.modal-content .toolbar {
+		flex-shrink: 0;
+	}
+
+	.modal-content .table-container {
+		flex: 1;
+		max-height: none;
+	}
+
+	.modal-content .empty-state {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	/* Responsive */
@@ -495,6 +638,10 @@
 		.btn-primary {
 			flex: 1;
 			justify-content: center;
+		}
+
+		.modal-container {
+			inset: 0.5rem;
 		}
 	}
 </style>
